@@ -5,6 +5,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import json
+from xvfbwrapper import Xvfb
+
+vdisplay = Xvfb()
+vdisplay.start()
 # To install selenium: pip install selenium
 
 ####
@@ -147,7 +151,7 @@ for idx1,tell_phrase in enumerate(tell_phrases):
 		complete_data+=data
 
 driver.quit()
-
+vdisplay.stop()
 # Temporary JSON file - overwritten (not appended)
 with open('data.txt', 'w') as outfile:
     json.dump(complete_data, outfile)
