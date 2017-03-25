@@ -1,0 +1,28 @@
+NEW WEBSITE - http://164.100.176.37/eregister/eregister.aspx
+TODO
+ 1) Coloured output
+ 2) Use of reports -enhance performance
+ 3) error handling - no result, net loss
+ 4) phantomjs - solves memory issues
+ 5) use/create protocol of data saving
+
+Requirements:
+	* python 2.7
+	* Ubuntu
+	1) selenium: pip install selenium
+	2) Chromedriver: download url: http://chromedriver.storage.googleapis.com/2.16/chromedriver_linux64.zip, unzip and specfy path in line #47: 'driver = webdri ... '
+
+Hard Coded Info reqd:
+	1) phrases range
+	2) classes range
+	-> to be mentioned in tell_phrases and tell_classes as a list.
+	-> python code to generate big phrases list:
+		c = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+		[x+y+z for x in c for y in c for z in c]
+	3) time_sleep: is the time delay between two calls (two wordmarks), in seconds, default:2, increase if IP Banned or slow net(if same row repeats itself). To be mentioned when calling get_info function: line #72: 'data = get_i ... '
+
+Outputs:
+	1) csv file 'data.csv' which appends the row
+		header format: [Phrase search,Class Number,Word Mark,Proprietor,Appl. No.,Appl. Date,Status,Journal No.,Journal Date,Used Since,Valid Upto,Goods & Services Description,Image Url]
+	2) json text file: 'data.txt' - temporary and overritten. Just for backup.
+	3) images saved in the dirctory with name: 'word_mark-appl_no'
