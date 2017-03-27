@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import json
-# from xvfbwrapper import Xvfb
+from xvfbwrapper import Xvfb
 from hasher import dhash
 from db import *
 from imagereader import image
@@ -15,8 +15,8 @@ import shutil
 rotator=[0,90,180,270,360]
 tempDirectory="temp/images"
 finalDir="final/images"
-# vdisplay = Xvfb()
-# vdisplay.start()
+vdisplay = Xvfb()
+vdisplay.start()
 # To install selenium: pip install selenium
 
 ####
@@ -185,7 +185,7 @@ for idx1,tell_phrase in enumerate(tell_phrases):
 		complete_data+=data
 
 driver.quit()
-# vdisplay.stop()
+vdisplay.stop()
 # Temporary JSON file - overwritten (not appended)
 with open('data.txt', 'w') as outfile:
     json.dump(complete_data, outfile)
