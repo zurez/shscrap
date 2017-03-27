@@ -3,7 +3,7 @@ from db import *
 from imagereader import image
 # from PIL import Image
 from util import readFolder
-folder="testimage/images"
+folder="/var/www/FinalPixvera/static/images"
 rotator=[90,180,270,360]
 files=readFolder(folder)
 for i in files:
