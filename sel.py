@@ -5,10 +5,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import json
-from xvfbwrapper import Xvfb
-
-vdisplay = Xvfb()
-vdisplay.start()
+# from xvfbwrapper import Xvfb
+from hasher import dhash
+from db import *
+from imagereader import image
+# from PIL import Image
+from util import readFolder
+import shutil
+rotator=[0,90,180,270,360]
+tempDirectory="temp/images"
+finalDir="final/images"
+# vdisplay = Xvfb()
+# vdisplay.start()
 # To install selenium: pip install selenium
 
 ####
@@ -61,7 +69,7 @@ def get_info(identifier, time_sleep=2):
 		click_script = "document.getElementsByClassName('"+identifier+"')["+str(i)+"].getElementsByTagName('a')[0].click()"
 		driver.execute_script(click_script)
 		wait1 = WebDriverWait(driver, 10)
-		wait1.until(EC.visibility_of_element_located((By.ID, "ctl00_ContentPlaceHolder1_LblDetails")))
+		wait1.until(EC.visibility_of_element_located((By.ID, "ContentPlaceHolder1_LblDetails")))
 		application_left_script = "return document.getElementsByClassName('"+identifier+"')["+str(i)+"].getElementsByTagName('span')[6].innerText"
 		application_left = driver.execute_script(application_left_script)
 		found_it = False
@@ -70,11 +78,11 @@ def get_info(identifier, time_sleep=2):
 		while(not found_it):
 			time.sleep(time_sleep)
 			times+=1
-			application_right_script = "return document.getElementById('ctl00_ContentPlaceHolder1_PnlDetails').getElementsByTagName('td')[3].innerText"
+			application_right_script = "return document.getElementById('ContentPlaceHolder1_PnlDetails').getElementsByTagName('td')[3].innerText"
 			application_right = driver.execute_script(application_right_script).split()[0]
 			found_it = application_right==application_left
 			print '\t\t\tfetch attempt{0}: left=>{1} right=>{2} {3}'.format(times, application_left,application_right,found_it)
-		content_script = "return document.getElementById('ctl00_ContentPlaceHolder1_PnlDetails').getElementsByTagName('td')"
+		content_script = "return document.getElementById('ContentPlaceHolder1_PnlDetails').getElementsByTagName('td')"
 		table_cells = [table_cell.text.encode('ascii','ignore') for table_cell in driver.execute_script(content_script)]
 		table_cells_iterator = iter(table_cells)
 		tmp_data = {table_cell:next(table_cells_iterator) for table_cell in table_cells_iterator}
@@ -123,7 +131,7 @@ for idx1,tell_phrase in enumerate(tell_phrases):
 		print '\t', 'waiting for content to be loaded'
 		try:
 			wait1 = WebDriverWait(driver, 15)
-			wait1.until(EC.visibility_of_element_located((By.ID, "ctl00_ContentPlaceHolder1_MGVSearchResult")))
+			wait1.until(EC.visibility_of_element_located((By.ID, "ContentPlaceHolder1_MGVSearchResult")))
 			print '\t', 'search result loaded'
 			data = get_info('row') + get_info('alt')	#give time_sleep here if you want to change
 		except:
@@ -144,14 +152,40 @@ for idx1,tell_phrase in enumerate(tell_phrases):
 					photo_name = word_mark['text']['Word Mark']+'-'+word_mark['text']['Appl. No.'].split()[0]
 					print '\t\t', "[{0} of {1}]".format(idx3,len3), 'saving', photo_name
 					driver.get(photo_url)
-					driver.save_screenshot(photo_name+'.png')
+					
+
+					driver.save_screenshot(tempDirectory+"/"+photo_name+'.png')
+					# Decide here wether to move or delete.
+					filepath=tempDirectory+"/"+photo_name+'.png'
+					print filepath
+					match=0
+					for i in rotator:
+						img=image(filepath,i)
+						hashd=dhash(img)
+						validate=len(select(hashd))
+						if validate != 0:
+							match+=1
+							break
+					if match ==0:
+						print "Original Found"
+						for i in rotator:
+							img=image(filepath,i)
+							hashd=dhash(img)
+							insert(hashd)
+							newfilepath=finalDir+"/"+photo_name+'.png'
+							shutil.move(filepath,newfilepath)
+							os.rename(filepath,newfilepath)
+					else:
+						print "Duplicate Found"
+
+
 		except:
 			print '\t', 'Error with images', '\a'
 			continue
 		complete_data+=data
 
 driver.quit()
-vdisplay.stop()
+# vdisplay.stop()
 # Temporary JSON file - overwritten (not appended)
 with open('data.txt', 'w') as outfile:
     json.dump(complete_data, outfile)

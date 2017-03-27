@@ -1,3 +1,4 @@
+from PIL import Image
 def dhash(image, hash_size = 8):
 	# Grayscale and shrink the image in one step.
 	image = image.convert('L').resize(
