@@ -14,7 +14,7 @@ from util import readFolder
 import shutil
 rotator=[0,90,180,270,360]
 tempDirectory="temp/images"
-finalDir="final/images"
+finalDir="/var/www/FinalPixvera/static/images"
 vdisplay = Xvfb()
 vdisplay.start()
 # To install selenium: pip install selenium
