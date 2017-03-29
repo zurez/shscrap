@@ -179,7 +179,8 @@ for idx1,tell_phrase in enumerate(tell_phrases):
 						print "Duplicate Found"
 
 
-		except:
+		except Exception ,e:
+			print e
 			print '\t', 'Error with images', '\a'
 			continue
 		complete_data+=data
