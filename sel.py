@@ -174,7 +174,7 @@ for idx1,tell_phrase in enumerate(tell_phrases):
 							insert(hashd)
 							newfilepath=finalDir+"/"+photo_name+'.png'
 							shutil.move(filepath,newfilepath)
-							os.rename(filepath,newfilepath)
+							
 					else:
 						print "Duplicate Found"
 
