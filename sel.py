@@ -96,9 +96,9 @@ def get_info(identifier, time_sleep=2):
 	return dict_list
 
 # Code to generate the triagram sequence: Run it in python cmd line so as to generate ['AAA','AAB',...]
-# c = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-# [x+y+z for x in c for y in c for z in c]
-tell_phrases = ['AAA','AAB']
+c = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+tell_phrases=[x+y+z for x in c for y in c for z in c]
+#tell_phrases = ['AAA','AAB']
 len1 = len(tell_phrases)-1
 tell_classes = range(1,46)
 len2 = len(tell_classes)-1
