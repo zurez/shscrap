@@ -152,7 +152,7 @@ for idx1,tell_phrase in enumerate(tell_phrases):
 					photo_name = word_mark['text']['Word Mark']+'-'+word_mark['text']['Appl. No.'].split()[0]
 					print '\t\t', "[{0} of {1}]".format(idx3,len3), 'saving', photo_name
 					driver.get(photo_url)
-					
+					photo_name.replace(" ","%")
 
 					driver.save_screenshot(tempDirectory+"/"+photo_name+'.png')
 					# Decide here wether to move or delete.
